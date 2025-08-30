@@ -56,7 +56,7 @@ timeout = 30
 start_time = time.time()
 while True:
     files = os.listdir(download_dir)
-    still_downloading = any(file.startswith('.crdownload') for file in files)
+    still_downloading = any(file.startswith('.crdownload') or file.endswith('.tmp') for file in files)
 
     if not os.path.exists(download_dir):
         os.makedirs(download_dir)
@@ -76,7 +76,6 @@ current_date = date.today().strftime('%d-%m-%Y')
 new_name = f'{current_date}_itajuipe.json'
 
 for filename in os.listdir(download_dir):
-    if filename.endswith('.tmp'):
         old_path = os.path.join(download_dir, filename)
         new_path = os.path.join(download_dir, new_name)
 
