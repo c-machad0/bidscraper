@@ -80,8 +80,24 @@ class BidScraper:
 
             time.sleep(1)
 
-    def custom_file(self):
-        raise NotImplementedError
+    def custom_file(self, new_name):
+        folderpath = self.download_dir
+        file_type = "*.json"
+        downloaded_file = glob.glob(os.path.join(folderpath, file_type))
+
+        if not downloaded_file:
+            print('Nenhum arquivo JSON encontrado')
+            return
+
+        max_file = max(downloaded_file, key=os.path.getctime)
+
+        old_path = os.path.join(self.download_dir, max_file)
+        new_path = os.path.join(self.download_dir, new_name)
+
+        if os.path.exists(new_path):
+            os.remove(new_path)
+
+        os.rename(old_path, new_path)
 
     def print_file(self):
         folderpath = self.download_dir
@@ -119,23 +135,7 @@ class BidScraperItajuipe(BidScraper):
         current_date = date.today().strftime('%d-%m-%Y')
         new_name = f'{current_date}_itajuipe.json'
 
-        folderpath = self.download_dir
-        file_type = "*.json"
-        downloaded_file = glob.glob(os.path.join(folderpath, file_type))
-
-        if not downloaded_file:
-            print('Nenhum arquivo JSON encontrado')
-            return
-
-        max_file = max(downloaded_file, key=os.path.getctime)
-
-        old_path = os.path.join(self.download_dir, max_file)
-        new_path = os.path.join(self.download_dir, new_name)
-
-        if os.path.exists(new_path):
-            os.remove(new_path)
-
-        os.rename(old_path, new_path)
+        super().custom_file(new_name)
 
 class BidScraperItapitanga(BidScraper):
     def access_url(self):
@@ -145,23 +145,7 @@ class BidScraperItapitanga(BidScraper):
         current_date = date.today().strftime('%d-%m-%Y')
         new_name = f'{current_date}_itapitanga.json'
 
-        folderpath = self.download_dir
-        file_type = "*.json"
-        downloaded_file = glob.glob(os.path.join(folderpath, file_type))
-
-        if not downloaded_file:
-            print('Nenhum arquivo JSON encontrado')
-            return
-
-        max_file = max(downloaded_file, key=os.path.getctime)
-
-        old_path = os.path.join(self.download_dir, max_file)
-        new_path = os.path.join(self.download_dir, new_name)
-
-        if os.path.exists(new_path):
-            os.remove(new_path)
-
-        os.rename(old_path, new_path)
+        super().custom_file(new_name)
 
 class BidScraperAlmadina(BidScraper):
     def access_url(self):
