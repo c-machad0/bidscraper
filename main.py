@@ -1,6 +1,9 @@
 import os
 import time
 from datetime import date
+import glob
+import json
+from pprint import pprint
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -87,6 +90,31 @@ class BidScraper:
 
                 os.rename(old_path, new_path)
 
+    def print_file(self):
+        folderpath = self.download_dir
+        file_type = "*.json"
+        downloaded_file = glob.glob(os.path.join(folderpath, file_type))
+
+        if not downloaded_file:
+            print('Nenhum arquivo JSON encontrado')
+            return
+
+        max_file = max(downloaded_file, key=os.path.getctime) # Retorna o ultimo arquivo do diretorio
+
+        with open(max_file, 'r', encoding='utf-8') as file:
+            data_file = json.load(file)
+
+            print()
+
+        for data in data_file:
+            pprint({
+                "DataLicitacao": data.get("DataLicitacao"),
+                "NumeroLicitacao": data.get("NumeroLicitacao"),
+                "Objeto": data.get("Objeto"),
+                "Modalidade": data.get("Modalidade"),
+                "Status": data.get("Status")
+            })
+
     def quit_driver(self):
         self.driver.quit()
 
@@ -113,4 +141,5 @@ scrapper_itajuipe.button_search()
 scrapper_itajuipe.json_icon()
 scrapper_itajuipe.download_file()
 scrapper_itajuipe.custom_file()
+scrapper_itajuipe.print_file()
 scrapper_itajuipe.quit_driver()
