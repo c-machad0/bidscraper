@@ -81,14 +81,7 @@ class BidScraper:
             time.sleep(1)
 
     def custom_file(self):
-        current_date = date.today().strftime('%d-%m-%Y')
-        new_name = f'{current_date}_itajuipe.json'
-
-        for filename in os.listdir(self.download_dir):
-                old_path = os.path.join(self.download_dir, filename)
-                new_path = os.path.join(self.download_dir, new_name)
-
-                os.rename(old_path, new_path)
+        raise NotImplementedError
 
     def print_file(self):
         folderpath = self.download_dir
@@ -122,17 +115,61 @@ class BidScraperItajuipe(BidScraper):
     def access_url(self):
         self.driver.get('https://transparencia.itajuipe.ba.gov.br/licitacoes')
 
+    def custom_file(self):
+        current_date = date.today().strftime('%d-%m-%Y')
+        new_name = f'{current_date}_itajuipe.json'
+
+        folderpath = self.download_dir
+        file_type = "*.json"
+        downloaded_file = glob.glob(os.path.join(folderpath, file_type))
+
+        if not downloaded_file:
+            print('Nenhum arquivo JSON encontrado')
+            return
+
+        max_file = max(downloaded_file, key=os.path.getctime)
+
+        old_path = os.path.join(self.download_dir, max_file)
+        new_path = os.path.join(self.download_dir, new_name)
+
+        if os.path.exists(new_path):
+            os.remove(new_path)
+
+        os.rename(old_path, new_path)
+
 class BidScraperItapitanga(BidScraper):
     def access_url(self):
-        ...
+        self.driver.get('https://transparencia.itapitanga.ba.gov.br/licitacoes')
+
+    def custom_file(self):
+        current_date = date.today().strftime('%d-%m-%Y')
+        new_name = f'{current_date}_itapitanga.json'
+
+        folderpath = self.download_dir
+        file_type = "*.json"
+        downloaded_file = glob.glob(os.path.join(folderpath, file_type))
+
+        if not downloaded_file:
+            print('Nenhum arquivo JSON encontrado')
+            return
+
+        max_file = max(downloaded_file, key=os.path.getctime)
+
+        old_path = os.path.join(self.download_dir, max_file)
+        new_path = os.path.join(self.download_dir, new_name)
+
+        if os.path.exists(new_path):
+            os.remove(new_path)
+
+        os.rename(old_path, new_path)
 
 class BidScraperAlmadina(BidScraper):
     def access_url(self):
-        ...
+        self.driver.get('https://transparencia.almadina.ba.gov.br/licitacoes')
 
 class BidScraperCoaraci(BidScraper):
     def access_url(self):
-        ...
+        self.driver.get('https://acessoainformacao.coaraci.ba.gov.br/licitacoes/')
 
 scrapper_itajuipe = BidScraperItajuipe()
 scrapper_itajuipe.access_url()
