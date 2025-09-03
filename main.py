@@ -68,12 +68,12 @@ class BidScraper:
         start_time = time.time()
         while True:
             files = os.listdir(self._download_dir)
-            still_downloading = any(file.startswith('.crdownload') or file.endswith('.tmp') for file in files)
+            file_downloading = any(file.startswith('.crdownload') or file.endswith('.tmp') for file in files)
 
-            if not still_downloading:
+            if not file_downloading:
                 print('Nenhum arquivo .crdownload ou .tmp encontrado. Download finalizado!')
                 break
-
+            
             if time.time() - start_time > timeout:
                 print('Tempo limite atingido! Ainda pode estar baixando')
                 break
@@ -99,7 +99,7 @@ class BidScraper:
 
         os.rename(old_path, new_path)
 
-    def print_file(self):
+    def print_file(self): # Função temporária. Só esta aqui para que eu consiga visualizar melhor os dados
         folderpath = self._download_dir
         file_type = "*.json"
         downloaded_file = glob.glob(os.path.join(folderpath, file_type))

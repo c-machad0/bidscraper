@@ -27,6 +27,8 @@ teste4.py
 teste5.py
 codigo_base.py
 
+# Database extensions
+*.db
 
 # Distribution / packaging
 .Python
