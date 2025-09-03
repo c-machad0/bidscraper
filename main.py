@@ -32,6 +32,16 @@ class BidScraper:
         self._service = ChromeService(ChromeDriverManager().install())
         self._driver = webdriver.Chrome(service=self._service, options=self.options)
 
+    def run_script(self, term='Pregão Eletrônico'):
+        self.access_url()
+        self.key_search(term)
+        self.button_search()
+        self.json_icon()
+        self.download_file()
+        self.custom_file()
+        self.print_file()
+        self.quit_driver()
+
     def access_url(self):
         raise NotImplementedError
 
@@ -156,11 +166,4 @@ class BidScraperCoaraci(BidScraper):
         self._driver.get('https://acessoainformacao.coaraci.ba.gov.br/licitacoes/')
 
 scrapper_itajuipe = BidScraperItajuipe()
-scrapper_itajuipe.access_url()
-scrapper_itajuipe.key_search('Pregão Eletrônico')
-scrapper_itajuipe.button_search()
-scrapper_itajuipe.json_icon()
-scrapper_itajuipe.download_file()
-scrapper_itajuipe.custom_file()
-scrapper_itajuipe.print_file()
-scrapper_itajuipe.quit_driver()
+scrapper_itajuipe.run_script()
