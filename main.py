@@ -14,6 +14,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 
+from database import BidDatabase
+
+
+def run_database():
+    db = BidDatabase()
+    db.connector
+    db.create_table()
+    db.update_table()
+    db.list_data()
+    db.close_database()
 
 class BidScraper:
     def __init__(self):
@@ -32,10 +42,8 @@ class BidScraper:
         self._service = ChromeService(ChromeDriverManager().install())
         self._driver = webdriver.Chrome(service=self._service, options=self.options)
 
-    def run_script(self, term='Pregão Eletrônico'):
+    def run_script(self):
         self.access_url()
-        self.key_search(term)
-        self.button_search()
         self.json_icon()
         self.download_file()
         self.custom_file()
@@ -44,23 +52,6 @@ class BidScraper:
 
     def access_url(self):
         raise NotImplementedError
-
-    def key_search(self, search_term):
-        search = self._driver.find_elements(By. ID, 'search')
-        field = search[4]
-        field.send_keys(search_term) # Pregão Eletrônico
-
-    def button_search(self):
-        button = WebDriverWait(self._driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, 'body > app-root > app-licitacoes > div.content-i > div.content-box.mt-0 > div:nth-child(6) > div > form > div > div.col-sm-4.mt-4 > button.btn.btn-primary'))
-        )
-
-        self._driver.execute_script("arguments[0].scrollIntoView(true);", button)
-
-        try:
-            button.click()
-        except Exception:
-            self._driver.execute_script("arguments[0].click();", button)
 
     def json_icon(self):
         json_button = WebDriverWait(self._driver, 20).until(
@@ -165,5 +156,8 @@ class BidScraperCoaraci(BidScraper):
     def access_url(self):
         self._driver.get('https://acessoainformacao.coaraci.ba.gov.br/licitacoes/')
 
-scrapper_itajuipe = BidScraperItajuipe()
-scrapper_itajuipe.run_script()
+if __name__ == '__main__':
+    scrapper_itajuipe = BidScraperItajuipe()
+    scrapper_itajuipe.run_script()
+    
+    run_database()
