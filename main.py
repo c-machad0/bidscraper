@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 from webdriver_manager.chrome import ChromeDriverManager
 
 
@@ -22,7 +23,7 @@ def run_database():
     db.connector
     db.create_table()
     db.update_table()
-    db.list_data()
+    #db.list_data()
     db.close_database()
 
 class BidScraper:
@@ -45,11 +46,23 @@ class BidScraper:
     def run_script(self):
         self.access_url()
         self.json_icon()
+        if self.nofile_alert():
+            print('Encerrando execução devido alerta')
+            exit()
         self.download_file()
         self.custom_file()
-        self.print_file()
         self.quit_driver()
-
+        
+    def nofile_alert(self):
+        try:
+            alert = WebDriverWait(self._driver, 5).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, 'body > div.swal2-container.swal2-center.swal2-backdrop-show > div > div.swal2-actions > button.swal2-confirm.swal2-styled'))
+            )
+            alert.click()
+            return True 
+        except TimeoutException:# Se não aparecer dentro do timeout, não houve alerta
+            return False
+        
     def access_url(self):
         raise NotImplementedError
 
@@ -72,7 +85,7 @@ class BidScraper:
             file_downloading = any(file.startswith('.crdownload') or file.endswith('.tmp') for file in files)
 
             if not file_downloading:
-                print('Nenhum arquivo .crdownload ou .tmp encontrado. Download finalizado!')
+                print('Download finalizado!')
                 break
             
             if time.time() - start_time > timeout:
@@ -89,42 +102,17 @@ class BidScraper:
         if not downloaded_file:
             print('Nenhum arquivo JSON encontrado')
             return
-
+        
         max_file = max(downloaded_file, key=os.path.getctime)
 
-        old_path = os.path.join(self._download_dir, max_file)
+        old_path = max_file
         new_path = os.path.join(self._download_dir, new_name)
 
         if os.path.exists(new_path):
             os.remove(new_path)
 
         os.rename(old_path, new_path)
-
-    def print_file(self): # Função temporária. Só esta aqui para que eu consiga visualizar melhor os dados
-        folderpath = self._download_dir
-        file_type = "*.json"
-        downloaded_file = glob.glob(os.path.join(folderpath, file_type))
-
-        if not downloaded_file:
-            print('Nenhum arquivo JSON encontrado')
-            return
-
-        max_file = max(downloaded_file, key=os.path.getctime) # Retorna o ultimo arquivo do diretorio
-
-        with open(max_file, 'r', encoding='utf-8') as file:
-            data_file = json.load(file)
-
-            print()
-
-        for data in data_file:
-            pprint({
-                "DataLicitacao": data.get("DataLicitacao"),
-                "NumeroLicitacao": data.get("NumeroLicitacao"),
-                "Objeto": data.get("Objeto"),
-                "Modalidade": data.get("Modalidade"),
-                "Status": data.get("Status")
-            })
-
+    
     def quit_driver(self):
         self._driver.quit()
 
@@ -151,13 +139,26 @@ class BidScraperItapitanga(BidScraper):
 class BidScraperAlmadina(BidScraper):
     def access_url(self):
         self._driver.get('https://transparencia.almadina.ba.gov.br/licitacoes')
+    
+    def custom_file(self):
+        current_date = date.today().strftime('%d-%m-%Y')
+        new_name = f'{current_date}_almadina.json'
+
+        super().custom_file(new_name)
 
 class BidScraperCoaraci(BidScraper):
     def access_url(self):
         self._driver.get('https://acessoainformacao.coaraci.ba.gov.br/licitacoes/')
+    
+    def custom_file(self):
+        current_date = date.today().strftime('%d-%m-%Y')
+        new_name = f'{current_date}_coaraci.json'
 
+        super().custom_file(new_name)
 if __name__ == '__main__':
     scrapper_itajuipe = BidScraperItajuipe()
     scrapper_itajuipe.run_script()
+    scrapper_itapitanga = BidScraperItapitanga()
+    scrapper_itapitanga.run_script()
     
     run_database()

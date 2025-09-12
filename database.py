@@ -86,12 +86,3 @@ class BidDatabase:
         self.db_cursor.close()
         self.connector.close()
 
-
-#db = BidDatabase()
-#db.connector
-#db.create_table()
-#db.update_table()
-#db.list_data()
-#db.delete_data()
-#db.close_database()
-
