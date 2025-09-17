@@ -6,7 +6,6 @@ def run_database():
     db.connector
     db.create_table()
     db.update_table()
-    #db.list_data()
     db.close_database()
 
 if __name__ == '__main__':

@@ -29,7 +29,7 @@ class BidDatabase:
 
         self.connector.commit()
 
-    def list_data(self):
+    """def list_data(self): # Função temporária
         self.db_cursor.execute('''SELECT * FROM licitacoes''')
 
         data_info = self.db_cursor.fetchall()
@@ -38,11 +38,11 @@ class BidDatabase:
             print('Não existe nada no banco de dados')
 
         for line in data_info:
-            pprint(line)
+            pprint(line)"""
 
     def update_table(self):
         folderpath = self._download_dir
-        file_type = "*json"
+        file_type = "*.json"
         downloaded_file = glob.glob(os.path.join(folderpath, file_type))
 
         if not downloaded_file:
@@ -75,13 +75,20 @@ class BidDatabase:
         except sqlite3.IntegrityError as e: # Lançamento de erro quando ocorrerem registros duplicados
             print(f'⚠️ Registro duplicado detectado: {e}')
             os.remove(max_file)
-            self.connector.commit
+            self.connector.commit()
 
     def delete_data(self): # Testando função
         self.db_cursor.execute('''DELETE FROM licitacoes''')
 
         self.connector.commit()
 
+    def filtered_search(self, keyword):
+        self.db_cursor.execute('SELECT * FROM licitacoes where objeto LIKE ?', (f'%{keyword}%',))
+        
+        filtered_info = self.db_cursor.fetchall()
+
+        return filtered_info
+    
     def close_database(self):
         self.db_cursor.close()
         self.connector.close()
