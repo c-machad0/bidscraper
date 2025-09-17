@@ -2,9 +2,10 @@ from pprint import pprint
 
 from database import BidDatabase
 
-send_keyword = str(input('Envie a palavra chave para ter uma busca filtrada: '))
-filter = BidDatabase()
-info_filter = filter.filtered_search(send_keyword)
+object_filter = str(input('Envie a palavra chave para ter uma busca filtrada: '))
+status_filter = str(input('Envite o status desejado: '))
+bid_filter = BidDatabase()
+info_filter = bid_filter.filtered_search(object_filter, status_filter)
 
 for line in info_filter:
     pprint(line)

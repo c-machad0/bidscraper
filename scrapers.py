@@ -10,7 +10,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, ElementNotInteractableException, StaleElementReferenceException
 from webdriver_manager.chrome import ChromeDriverManager
 
 
@@ -62,7 +62,7 @@ class BidScraper:
 
         try:
             json_button.click()
-        except Exception:
+        except (ElementClickInterceptedException, ElementNotInteractableException, StaleElementReferenceException):
             self._driver.execute_script("arguments[0].click();", json_button)
 
     def download_file(self):

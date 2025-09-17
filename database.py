@@ -29,17 +29,6 @@ class BidDatabase:
 
         self.connector.commit()
 
-    """def list_data(self): # Função temporária
-        self.db_cursor.execute('''SELECT * FROM licitacoes''')
-
-        data_info = self.db_cursor.fetchall()
-
-        if not data_info:
-            print('Não existe nada no banco de dados')
-
-        for line in data_info:
-            pprint(line)"""
-
     def update_table(self):
         folderpath = self._download_dir
         file_type = "*.json"
@@ -82,8 +71,8 @@ class BidDatabase:
 
         self.connector.commit()
 
-    def filtered_search(self, keyword):
-        self.db_cursor.execute('SELECT * FROM licitacoes where objeto LIKE ?', (f'%{keyword}%',))
+    def filtered_search(self, keyword_object, keyword_status):
+        self.db_cursor.execute('SELECT * FROM licitacoes where objeto LIKE ? and status LIKE ?', (f'%{keyword_object}%', (f'%{keyword_status}%')))
         
         filtered_info = self.db_cursor.fetchall()
 
@@ -92,4 +81,3 @@ class BidDatabase:
     def close_database(self):
         self.db_cursor.close()
         self.connector.close()
-
