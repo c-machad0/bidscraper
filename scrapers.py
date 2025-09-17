@@ -32,18 +32,11 @@ class BidScraper:
         self._driver = webdriver.Chrome(service=self._service, options=self.options)
             
     def run_script(self):
-        try:
-            for file in os.listdir(self._download_dir):
-                fullpath = os.path.join(self._download_dir, file)
-                os.remove(fullpath)
-        except FileNotFoundError:
-            print('Diretório limpo')
-
         self.access_url()
         self.json_icon()
         if self.nofile_alert():
             print('Encerrando execução devido alerta')
-            exit()
+            pass
         self.download_file()
         self.custom_file()
         self.quit_driver()
@@ -141,12 +134,22 @@ class BidScraperAlmadina(BidScraper):
 
         super().custom_file(new_name)
 
-class BidScraperCoaraci(BidScraper):
+class BidScraperIbicarai(BidScraper):
     def access_url(self):
-        self._driver.get('https://acessoainformacao.coaraci.ba.gov.br/licitacoes/')
-    
+        self._driver.get('https://transparencia.ibicarai.ba.gov.br/licitacoes')
+
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
-        new_name = f'{current_date}_coaraci.json'
+        new_name = f'{current_date}_ibicarai.json'
+
+        super().custom_file(new_name)
+        
+class BidScraperUbaitaba(BidScraper):
+    def access_url(self):
+        self._driver.get('https://transparencia.ubaitaba.ba.gov.br/licitacoes')
+
+    def custom_file(self):
+        current_date = date.today().strftime('%d-%m-%Y')
+        new_name = f'{current_date}_ubaitaba.json'
 
         super().custom_file(new_name)

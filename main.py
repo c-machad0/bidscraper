@@ -1,5 +1,5 @@
 from database import BidDatabase
-from scrapers import BidScraperItajuipe
+from scrapers import BidScraperItajuipe, BidScraperItapitanga, BidScraperAlmadina, BidScraperIbicarai, BidScraperUbaitaba
 
 def run_database():
     db = BidDatabase()
@@ -10,11 +10,14 @@ def run_database():
     db.close_database()
 
 if __name__ == '__main__':
-    scrapper_itajuipe = BidScraperItajuipe()
-    scrapper_itajuipe.run_script()
-    #scrapper_itapitanga = BidScraperItapitanga()
-    #scrapper_itapitanga.run_script()
-    #scrapper_coaraci = BidScraperCoaraci()
-    #scrapper_coaraci.run_script()
+    scrapers = [
+        BidScraperItajuipe(),
+        BidScraperItapitanga(),
+        BidScraperAlmadina(),
+        BidScraperIbicarai(),
+        BidScraperUbaitaba()
+    ]
     
-    run_database()
+    for scraper in scrapers:
+        scraper.run_script()
+        run_database()
