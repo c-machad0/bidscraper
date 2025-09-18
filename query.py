@@ -1,3 +1,10 @@
+"""
+query.py
+
+Interface simples CLI para consulta filtrada no banco de dados de licitações.
+Solicita palavra-chave e status, exibe resultados.
+"""
+
 from pprint import pprint
 
 from database import BidDatabase

@@ -1,11 +1,27 @@
+"""
+database.py
+
+Gerencia o banco SQLite para armazenamento e consulta de dados de licitações coletados.
+Inclui criação, atualização, exclusão e busca filtrada.
+"""
+
 import sqlite3
 import os
 import json
 import glob
-from pprint import pprint
+
 
 class BidDatabase:
+    """
+    Classe para manipular banco SQLite dos dados de licitações.
+
+    Métodos incluem criação de tabela, atualização via arquivos JSON,
+    busca filtrada e fechamento da conexão.
+    """
+
     def __init__(self):
+        """Configura conexão, cursor e diretório de arquivos JSON para importação."""
+
         self.connector = sqlite3.connect('dados_licitacao.db')
         self.db_cursor = self.connector.cursor()
 
@@ -13,6 +29,8 @@ class BidDatabase:
         self._download_dir = os.path.join(BASE_DIR, 'downloads')
 
     def create_table(self):
+        """Cria tabela licitacoes com restrição UNIQUE para evitar duplicidade."""
+
         self.db_cursor.execute('''
             CREATE TABLE IF NOT EXISTS licitacoes(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,6 +48,13 @@ class BidDatabase:
         self.connector.commit()
 
     def update_table(self):
+        """
+        Importa dados do JSON mais recente na pasta downloads.
+
+        Extrai nome do município do arquivo e insere registros,
+        ignorando duplicatas e removendo arquivo após processamento.
+        """
+
         folderpath = self._download_dir
         file_type = "*.json"
         downloaded_file = glob.glob(os.path.join(folderpath, file_type))
@@ -67,11 +92,24 @@ class BidDatabase:
             self.connector.commit()
 
     def delete_data(self): # Testando função
+        """Remove todos os registros da tabela licitacoes (uso para testes)."""
+
         self.db_cursor.execute('''DELETE FROM licitacoes''')
 
         self.connector.commit()
 
     def filtered_search(self, keyword_object, keyword_status):
+        """
+        Retorna lista de registros que correspondem aos filtros aplicados.
+
+        Args:
+            keyword_object (str): filtro para o campo objeto via LIKE
+            keyword_status (str): filtro para o campo status via LIKE
+
+        Returns:
+            List of tuples com os registros encontrados.
+        """
+
         self.db_cursor.execute('SELECT * FROM licitacoes where objeto LIKE ? and status LIKE ?', (f'%{keyword_object}%', (f'%{keyword_status}%')))
         
         filtered_info = self.db_cursor.fetchall()
@@ -79,5 +117,7 @@ class BidDatabase:
         return filtered_info
     
     def close_database(self):
+        """Fecha cursor e conexão com banco."""
+        
         self.db_cursor.close()
         self.connector.close()
