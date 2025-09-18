@@ -126,8 +126,8 @@ python query.py
 ### 📊 Exemplo de Consulta
 
 ```
-Palavra-chave: "construção"
-Status: "aberto"
+Palavra-chave: "obra"
+Status: "andamento"
 
 Resultado: Todas as licitações abertas relacionadas à construção
 em todos os municípios monitorados
