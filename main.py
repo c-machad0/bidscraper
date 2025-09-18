@@ -3,7 +3,6 @@ from scrapers import BidScraperItajuipe, BidScraperItapitanga, BidScraperAlmadin
 
 def run_database():
     db = BidDatabase()
-    db.connector
     db.create_table()
     db.update_table()
     db.close_database()
