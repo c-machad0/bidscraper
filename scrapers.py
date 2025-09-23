@@ -50,38 +50,16 @@ class BidScraper:
         Executa sequência principal de scraping:
         1. Acessa a URL
         2. Clica no ícone para download do JSON
-        3. Verifica alertas de ausência de arquivo
-        4. Aguarda download
-        5. Renomeia arquivo
-        6. Fecha driver
+        3. Aguarda download
+        4. Renomeia arquivo
+        5. Fecha driver
         """
         
         self.access_url()
         self.json_icon()
-        if self.nofile_alert():
-            print('Encerrando execução devido alerta')
-            pass
         self.download_file()
         self.custom_file()
         self.quit_driver()
-        
-    def nofile_alert(self):
-        """
-        Detecta aviso de ausência de dados e fecha o alerta.
-        
-        Returns:
-            True se alerta apareceu e foi fechado,
-            False caso contrário.
-        """
-
-        try:
-            alert = WebDriverWait(self._driver, 5).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, 'body > div.swal2-container.swal2-center.swal2-backdrop-show > div > div.swal2-actions > button.swal2-confirm.swal2-styled'))
-            )
-            alert.click()
-            return True 
-        except TimeoutException:# Se não aparecer dentro do timeout, não houve alerta
-            return False
         
     def access_url(self):
         """Método abstrato para acessar a URL do portal da cidade. Deve ser implementado nas subclasses."""
@@ -91,7 +69,7 @@ class BidScraper:
     def json_icon(self):
         """Encontra o botão do JSON e clica para iniciar o download."""
         json_button = WebDriverWait(self._driver, 20).until(
-            EC.element_to_be_clickable((By.XPATH, '/html/body/app-root/app-licitacoes/div[1]/div[3]/div[5]/div/div[2]/button[4]/img'))
+            EC.element_to_be_clickable((By.CSS_SELECTOR, '#edicoesAnteriores > form > div > div.col-sm-12.mt-4 > button:nth-child(2)'))
         )
         self._driver.execute_script("arguments[0].scrollIntoView(true);", json_button)
 
@@ -154,7 +132,7 @@ class BidScraper:
 
 class BidScraperItajuipe(BidScraper):
     def access_url(self):
-        self._driver.get('https://transparencia.itajuipe.ba.gov.br/licitacoes')
+        self._driver.get('https://diario.itajuipe.ba.gov.br/homepage')
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -164,7 +142,7 @@ class BidScraperItajuipe(BidScraper):
 
 class BidScraperItapitanga(BidScraper):
     def access_url(self):
-        self._driver.get('https://transparencia.itapitanga.ba.gov.br/licitacoes')
+        self._driver.get('https://diario.itapitanga.ba.gov.br/homepage')
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -172,7 +150,7 @@ class BidScraperItapitanga(BidScraper):
 
         super().custom_file(new_name)
 
-class BidScraperAlmadina(BidScraper):
+"""class BidScraperAlmadina(BidScraper):
     def access_url(self):
         self._driver.get('https://transparencia.almadina.ba.gov.br/licitacoes')
     
@@ -200,4 +178,4 @@ class BidScraperUbaitaba(BidScraper):
         current_date = date.today().strftime('%d-%m-%Y')
         new_name = f'{current_date}_ubaitaba.json'
 
-        super().custom_file(new_name)
+        super().custom_file(new_name)"""

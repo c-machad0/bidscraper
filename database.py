@@ -9,7 +9,9 @@ import sqlite3
 import os
 import json
 import glob
+import time
 
+from config import IMPORTANT_KEYWORDS
 
 class BidDatabase:
     """
@@ -35,13 +37,10 @@ class BidDatabase:
             CREATE TABLE IF NOT EXISTS licitacoes(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 cidade TEXT NOT NULL,
-                data_licitacao TEXT,
-                numero_licitacao TEXT,
-                objeto TEXT,
+                resumo TEXT,
                 modalidade TEXT,
-                status TEXT,
                 data_extracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(cidade, data_licitacao, numero_licitacao)
+                UNIQUE(cidade, resumo, modalidade)
                 )
             ''')
 
@@ -51,7 +50,7 @@ class BidDatabase:
         """
         Importa dados do JSON mais recente na pasta downloads.
 
-        Extrai nome do município do arquivo e insere registros,
+        Extrai nome do município e a modalidade de licitação do arquivo e insere registros,
         ignorando duplicatas e removendo arquivo após processamento.
         """
 
@@ -74,12 +73,20 @@ class BidDatabase:
 
         try:
             for data in json_file:
-                self.db_cursor.execute(
-                    '''INSERT INTO licitacoes (cidade, data_licitacao, numero_licitacao, objeto, modalidade, status)
-                    VALUES (?, ?, ?, ?, ?, ?)''',
-                (city_name.capitalize(), data.get("DataLicitacao"), data.get("NumeroLicitacao"),
-                data.get("Objeto"), data.get("Modalidade"), data.get("Status"))
-                )
+                bid_summary = data.get('observacao', '').lower() # Captura o resumo do diário oficial
+                receive_modality = None # Inicializa a variável
+
+                for modality, keywords in IMPORTANT_KEYWORDS.items(): # Itera sobre as palavras relevantes
+                    if any(word in bid_summary for word in keywords): # Se existir alguma palavra no resumo do diário que se encaixe em alguma modalidade 
+                        receive_modality = modality
+                        break
+                
+                if receive_modality: # Insere apenas a palavra chave contida no resumo
+                    self.db_cursor.execute(
+                        '''INSERT INTO licitacoes (cidade, resumo, modalidade)
+                        VALUES (?, ?, ?)''',
+                    (city_name.capitalize(), data.get("observacao"), receive_modality.title())
+                    )
 
             if os.path.exists(max_file):
                 os.remove(max_file) # Remove o arquivo, assim que as informações são inseridas na base de dados
@@ -98,19 +105,18 @@ class BidDatabase:
 
         self.connector.commit()
 
-    def filtered_search(self, keyword_object, keyword_status):
+    def filtered_search(self, modality):
         """
         Retorna lista de registros que correspondem aos filtros aplicados.
 
         Args:
-            keyword_object (str): filtro para o campo objeto via LIKE
-            keyword_status (str): filtro para o campo status via LIKE
-
+            modality (str): filtro para o campo modalidade via LIKE
+            
         Returns:
             List of tuples com os registros encontrados.
         """
 
-        self.db_cursor.execute('SELECT * FROM licitacoes where objeto LIKE ? and status LIKE ?', (f'%{keyword_object}%', (f'%{keyword_status}%')))
+        self.db_cursor.execute('SELECT * FROM licitacoes where modalidade LIKE ?', (f'%{modality}%', ))
         
         filtered_info = self.db_cursor.fetchall()
 
