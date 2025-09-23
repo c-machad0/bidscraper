@@ -10,3 +10,12 @@ IMPORTANT_KEYWORDS = {
     'pregão presencial': ['aviso de licitação pregão presencial', 'aviso de licitação pregao presencial'],
     'concorrência pública': ['aviso de concorrência pública', 'aviso de concorrência eletrônica']
 }
+
+city_urls = {
+    'Itajuípe': 'https://diario.itajuipe.ba.gov.br/homepage',
+    'Itapitanga': 'https://diario.itapitanga.ba.gov.br/homepage',
+    'Almadina': 'https://diario.almadina.ba.gov.br/homepage',
+    'Ibicaraí': 'https://diario.ibicarai.ba.gov.br/homepage',
+    'Ubaitaba': 'https://diario.ubaitaba.ba.gov.br/homepage'
+
+}

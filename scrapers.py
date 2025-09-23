@@ -20,6 +20,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementClickInterceptedException, ElementNotInteractableException, StaleElementReferenceException
 from webdriver_manager.chrome import ChromeDriverManager
 
+from config import city_urls
 
 class BidScraper:
     """
@@ -132,7 +133,7 @@ class BidScraper:
 
 class BidScraperItajuipe(BidScraper):
     def access_url(self):
-        self._driver.get('https://diario.itajuipe.ba.gov.br/homepage')
+        self._driver.get(city_urls['Itajuípe'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -142,7 +143,7 @@ class BidScraperItajuipe(BidScraper):
 
 class BidScraperItapitanga(BidScraper):
     def access_url(self):
-        self._driver.get('https://diario.itapitanga.ba.gov.br/homepage')
+        self._driver.get(city_urls['Itapitanga'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -151,7 +152,7 @@ class BidScraperItapitanga(BidScraper):
         super().custom_file(new_name)
 class BidScraperAlmadina(BidScraper):
     def access_url(self):
-        self._driver.get('https://diario.almadina.ba.gov.br/homepage')
+        self._driver.get(city_urls['Almadina'])
     
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -161,7 +162,7 @@ class BidScraperAlmadina(BidScraper):
 
 class BidScraperIbicarai(BidScraper):
     def access_url(self):
-        self._driver.get('https://diario.ibicarai.ba.gov.br/homepage')
+        self._driver.get(city_urls['Ibicaraí'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -171,7 +172,7 @@ class BidScraperIbicarai(BidScraper):
         
 class BidScraperUbaitaba(BidScraper):
     def access_url(self):
-        self._driver.get('https://diario.ubaitaba.ba.gov.br/homepage')
+        self._driver.get(city_urls['Ubaitaba'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
