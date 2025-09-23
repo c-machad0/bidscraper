@@ -9,7 +9,6 @@ import sqlite3
 import os
 import json
 import glob
-import time
 
 from config import IMPORTANT_KEYWORDS
 

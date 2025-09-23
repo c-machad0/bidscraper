@@ -17,7 +17,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, ElementNotInteractableException, StaleElementReferenceException
+from selenium.common.exceptions import ElementClickInterceptedException, ElementNotInteractableException, StaleElementReferenceException
 from webdriver_manager.chrome import ChromeDriverManager
 
 
@@ -149,10 +149,9 @@ class BidScraperItapitanga(BidScraper):
         new_name = f'{current_date}_itapitanga.json'
 
         super().custom_file(new_name)
-
-"""class BidScraperAlmadina(BidScraper):
+class BidScraperAlmadina(BidScraper):
     def access_url(self):
-        self._driver.get('https://transparencia.almadina.ba.gov.br/licitacoes')
+        self._driver.get('https://diario.almadina.ba.gov.br/homepage')
     
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -162,7 +161,7 @@ class BidScraperItapitanga(BidScraper):
 
 class BidScraperIbicarai(BidScraper):
     def access_url(self):
-        self._driver.get('https://transparencia.ibicarai.ba.gov.br/licitacoes')
+        self._driver.get('https://diario.ibicarai.ba.gov.br/homepage')
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -172,10 +171,10 @@ class BidScraperIbicarai(BidScraper):
         
 class BidScraperUbaitaba(BidScraper):
     def access_url(self):
-        self._driver.get('https://transparencia.ubaitaba.ba.gov.br/licitacoes')
+        self._driver.get('https://diario.ubaitaba.ba.gov.br/homepage')
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
         new_name = f'{current_date}_ubaitaba.json'
 
-        super().custom_file(new_name)"""
+        super().custom_file(new_name)
