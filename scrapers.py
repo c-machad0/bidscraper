@@ -179,3 +179,13 @@ class BidScraperUbaitaba(BidScraper):
         new_name = f'{current_date}_ubaitaba.json'
 
         super().custom_file(new_name)
+
+class BidScraperBarroPreto(BidScraper):
+    def access_url(self):
+        self._driver.get(city_urls['Barro Preto'])
+
+    def custom_file(self):
+        current_date = date.today().strftime('%d-%m-%Y')
+        new_name = f'{current_date}_barropreto.json'
+
+        super().custom_file(new_name)

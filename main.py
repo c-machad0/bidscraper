@@ -6,7 +6,7 @@ Orquestra execução dos scrapers específicos por município e atualização do
 """
 
 from database import BidDatabase
-from scrapers import BidScraperItajuipe, BidScraperItapitanga, BidScraperAlmadina, BidScraperIbicarai, BidScraperUbaitaba
+from scrapers import BidScraperItajuipe, BidScraperItapitanga, BidScraperAlmadina, BidScraperIbicarai, BidScraperUbaitaba, BidScraperBarroPreto
 
 def run_database():
     """
@@ -24,11 +24,12 @@ if __name__ == '__main__':
     Depois de cada scrape, atualiza o banco de dados com os novos dados.
     """
     scrapers = [
-        BidScraperItajuipe(),
-        BidScraperItapitanga(),
-        BidScraperAlmadina(),
-        BidScraperIbicarai(),
-        BidScraperUbaitaba()
+        #BidScraperItajuipe(),
+        #BidScraperItapitanga(),
+        #BidScraperAlmadina(),
+        #BidScraperIbicarai(),
+        #BidScraperUbaitaba(),
+        BidScraperBarroPreto()
     ]
     
     for scraper in scrapers:
