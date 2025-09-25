@@ -12,6 +12,11 @@ __pycache__/
 # C extensions
 *.so
 
+# Arquivos de log
+*.log
+log.*
+logs/
+
 # Arquivos json diversos
 ambient-fuze-461615-d0-e02e0ea39eed.json
 
