@@ -40,9 +40,9 @@ if __name__ == '__main__':
         ]
         
         for scraper in scrapers:
-            logger.info(f'Iniciando scraper para {scraper}')
+            logger.info(f'Iniciando scraper para a cidade de {scraper._scraper_name}')
             scraper.run_script()
-            logger.info(f'Scraper concluído para {scraper}')
+            logger.info(f'Scraper concluído para a cidade {scraper._scraper_name}')
             run_database()
         logger.info('Finalizado o scraping para todos os municípios')
     except Exception as error:

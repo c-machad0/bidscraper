@@ -132,6 +132,7 @@ class BidScraper:
         self._driver.quit()
 
 class BidScraperItajuipe(BidScraper):
+    _scraper_name = 'Itajuípe'
     def access_url(self):
         self._driver.get(city_urls['Itajuípe'])
 
@@ -142,6 +143,7 @@ class BidScraperItajuipe(BidScraper):
         super().custom_file(new_name)
 
 class BidScraperItapitanga(BidScraper):
+    _scraper_name = 'Itapitanga'
     def access_url(self):
         self._driver.get(city_urls['Itapitanga'])
 
@@ -151,6 +153,7 @@ class BidScraperItapitanga(BidScraper):
 
         super().custom_file(new_name)
 class BidScraperAlmadina(BidScraper):
+    _scraper_name = 'Almadina'
     def access_url(self):
         self._driver.get(city_urls['Almadina'])
     
@@ -161,6 +164,7 @@ class BidScraperAlmadina(BidScraper):
         super().custom_file(new_name)
 
 class BidScraperIbicarai(BidScraper):
+    _scraper_name = 'Ibicaraí'
     def access_url(self):
         self._driver.get(city_urls['Ibicaraí'])
 
@@ -171,6 +175,7 @@ class BidScraperIbicarai(BidScraper):
         super().custom_file(new_name)
         
 class BidScraperUbaitaba(BidScraper):
+    _scraper_name = 'Ubaitaba'
     def access_url(self):
         self._driver.get(city_urls['Ubaitaba'])
 
@@ -181,6 +186,7 @@ class BidScraperUbaitaba(BidScraper):
         super().custom_file(new_name)
 
 class BidScraperBarroPreto(BidScraper):
+    _scraper_name = 'Barro Preto'
     def access_url(self):
         self._driver.get(city_urls['Barro Preto'])
 
