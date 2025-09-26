@@ -1,28 +1,64 @@
 import logging
 import sys
 
-def main_logger(name: str):
-    format1 = "%(levelname)s|%(name)s|%(asctime)s|%(message)s|%(filename)s|%(lineno)d"
-
-    stream_handler = logging.StreamHandler(sys.stdout) # informa a saída para o console
-
-    file_handler = logging.FileHandler( # cria meu próprio handler
-        filename='log.log',
-        mode='w',
-        encoding='utf-8',
-    )
-
-    main_formatter = logging.Formatter(fmt=format1) # formata os handlers criados
-
-    # utiliza o formato nos handlers
-    file_handler.setFormatter(main_formatter)
-    stream_handler.setFormatter(main_formatter)
-
-    # configura o root logger
-    logging.basicConfig(handlers=[file_handler, stream_handler])
+class Loggers:
+    def __init__(self):
+        self.format1 = "%(levelname)s|%(name)s|%(asctime)s|%(message)s|%(filename)s|%(lineno)d"
+        self.file_handler = logging.FileHandler( # cria meu próprio handler
+            filename='bidscraper.log',
+            mode='a',
+            encoding='utf8'
+        )
+        self.stream_handler = logging.StreamHandler(sys.stdout) # informa a saída para o console
     
-    # cria meu logger e define o nível
-    logger = logging.getLogger('main')
-    logger.setLevel(logging.INFO)
+    def get_logger(self):
+        raise NotImplementedError
+    
+class MainLogger(Loggers):
+    def __init__(self):
+        super().__init__()
+        self.set_formatter()
+        self.set_handlers()
 
-    return logger
+    def get_logger(self, name: str):
+        # cria meu logger e define o nível
+        logger = logging.getLogger('main')
+        logger.setLevel(logging.INFO)
+
+        if not logger.hasHandlers():
+            logger.addHandler(self.file_handler)
+            logger.addHandler(self.stream_handler)
+
+        return logger
+
+    def set_formatter(self):
+        self.main_formatter = logging.Formatter(fmt=self.format1)
+
+    def set_handlers(self): 
+        # utiliza o formato nos handlers    
+        self.file_handler.setFormatter(self.main_formatter)
+        self.stream_handler.setFormatter(self.main_formatter)
+
+class ScrapLogger(Loggers):
+    def __init__(self):
+        super().__init__()
+        self.set_formatter()
+        self.set_handlers()
+
+    def get_logger(self, name: str):
+        logger = logging.getLogger('scrapers')
+        logger.setLevel(logging.DEBUG)
+
+        if not logger.hasHandlers():
+            logger.addHandler(self.file_handler)
+            logger.addHandler(self.stream_handler)
+
+        return logger
+    
+    def set_formatter(self):
+        self.main_formatter = logging.Formatter(fmt=self.format1)
+
+    def set_handlers(self): 
+        # utiliza o formato nos handlers    
+        self.file_handler.setFormatter(self.main_formatter)
+        self.stream_handler.setFormatter(self.main_formatter)

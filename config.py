@@ -11,7 +11,7 @@ IMPORTANT_KEYWORDS = {
     'concorrência pública': ['aviso de concorrência pública', 'aviso de concorrência eletrônica']
 }
 
-city_urls = {
+CITIES_URLS = {
     'Itajuípe': 'https://diario.itajuipe.ba.gov.br/homepage',
     'Itapitanga': 'https://diario.itapitanga.ba.gov.br/homepage',
     'Almadina': 'https://diario.almadina.ba.gov.br/homepage',

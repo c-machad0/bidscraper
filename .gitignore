@@ -25,18 +25,7 @@ guia.txt
 resumo.txt
 
 # Scripts de teste
-teste.py
-teste1.py
-teste2.py
-teste3.py
-teste4.py
-teste5.py
-teste6.py
-teste7.py
-teste8.py
-teste9.py
-teste10.py
-codigo_base.py
+/testes_temporarios
 
 # Database extensions
 *.db

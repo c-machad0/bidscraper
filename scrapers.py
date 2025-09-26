@@ -20,7 +20,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementClickInterceptedException, ElementNotInteractableException, StaleElementReferenceException
 from webdriver_manager.chrome import ChromeDriverManager
 
-from config import city_urls
+from config import CITIES_URLS
+from logger import ScrapLogger
 
 class BidScraper:
     """
@@ -45,7 +46,9 @@ class BidScraper:
         self.options.add_experimental_option('prefs', prefs)
         self._service = ChromeService(ChromeDriverManager().install())
         self._driver = webdriver.Chrome(service=self._service, options=self.options)
-            
+
+        self.scrap_logger = ScrapLogger().get_logger('scrapers')
+
     def run_script(self):
         """
         Executa sequência principal de scraping:
@@ -68,37 +71,44 @@ class BidScraper:
         raise NotImplementedError
 
     def json_icon(self):
-        """Encontra o botão do JSON e clica para iniciar o download."""
-        json_button = WebDriverWait(self._driver, 20).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, '#edicoesAnteriores > form > div > div.col-sm-12.mt-4 > button:nth-child(2)'))
-        )
-        self._driver.execute_script("arguments[0].scrollIntoView(true);", json_button)
-
         try:
-            json_button.click()
-        except (ElementClickInterceptedException, ElementNotInteractableException, StaleElementReferenceException):
-            self._driver.execute_script("arguments[0].click();", json_button)
+            """Encontra o botão do JSON e clica para iniciar o download."""
+            json_button = WebDriverWait(self._driver, 20).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '#edicoesAnteriores > form > div > div.col-sm-12.mt-4 > button:nth-child(2)'))
+            )
+            self._driver.execute_script("arguments[0].scrollIntoView(true);", json_button)
+
+            try:
+                json_button.click()
+            except (ElementClickInterceptedException, ElementNotInteractableException, StaleElementReferenceException):
+                self._driver.execute_script("arguments[0].click();", json_button)
+        
+        except Exception as error:
+            self.scrap_logger.error(f'{error}: Erro ao encontrar botão')
 
     def download_file(self):
         """
         Aguarda até o download do arquivo JSON terminar, monitorando arquivos temporários na pasta.
         """
 
-        timeout = 30
-        start_time = time.time()
-        while True:
-            files = os.listdir(self._download_dir)
-            file_downloading = any(file.startswith('.crdownload') or file.endswith('.tmp') for file in files)
+        try:
+            timeout = 30
+            start_time = time.time()
+            while True:
+                files = os.listdir(self._download_dir)
+                file_downloading = any(file.startswith('.crdownload') or file.endswith('.tmp') for file in files)
 
-            if not file_downloading:
-                print('Download finalizado!')
-                break
-            
-            if time.time() - start_time > timeout:
-                print('Tempo limite atingido! Ainda pode estar baixando')
-                break
+                if not file_downloading:
+                    self.scrap_logger.info('Download finalizado!')
+                    break
+                
+                if time.time() - start_time > timeout:
+                    self.scrap_logger.warning(f'{error}: Tempo de download excedido')
+                    break
 
-            time.sleep(1)
+                time.sleep(1)
+        except Exception as error:
+            self.scrap_logger.warning(f'{error}: Erro inesperado')
 
     def custom_file(self, new_name):
         """
@@ -113,7 +123,7 @@ class BidScraper:
         downloaded_file = glob.glob(os.path.join(folderpath, file_type))
 
         if not downloaded_file:
-            print('Nenhum arquivo JSON encontrado')
+            self.scrap_logger.warning('Nenhum arquivo JSON encontrado')
             return
         
         max_file = max(downloaded_file, key=os.path.getctime)
@@ -134,7 +144,7 @@ class BidScraper:
 class BidScraperItajuipe(BidScraper):
     _scraper_name = 'Itajuípe'
     def access_url(self):
-        self._driver.get(city_urls['Itajuípe'])
+        self._driver.get(CITIES_URLS['Itajuípe'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -145,7 +155,7 @@ class BidScraperItajuipe(BidScraper):
 class BidScraperItapitanga(BidScraper):
     _scraper_name = 'Itapitanga'
     def access_url(self):
-        self._driver.get(city_urls['Itapitanga'])
+        self._driver.get(CITIES_URLS['Itapitanga'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -155,7 +165,7 @@ class BidScraperItapitanga(BidScraper):
 class BidScraperAlmadina(BidScraper):
     _scraper_name = 'Almadina'
     def access_url(self):
-        self._driver.get(city_urls['Almadina'])
+        self._driver.get(CITIES_URLS['Almadina'])
     
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -166,7 +176,7 @@ class BidScraperAlmadina(BidScraper):
 class BidScraperIbicarai(BidScraper):
     _scraper_name = 'Ibicaraí'
     def access_url(self):
-        self._driver.get(city_urls['Ibicaraí'])
+        self._driver.get(CITIES_URLS['Ibicaraí'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -177,7 +187,7 @@ class BidScraperIbicarai(BidScraper):
 class BidScraperUbaitaba(BidScraper):
     _scraper_name = 'Ubaitaba'
     def access_url(self):
-        self._driver.get(city_urls['Ubaitaba'])
+        self._driver.get(CITIES_URLS['Ubaitaba'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -188,7 +198,7 @@ class BidScraperUbaitaba(BidScraper):
 class BidScraperBarroPreto(BidScraper):
     _scraper_name = 'Barro Preto'
     def access_url(self):
-        self._driver.get(city_urls['Barro Preto'])
+        self._driver.get(CITIES_URLS['Barro Preto'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
