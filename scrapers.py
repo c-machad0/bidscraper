@@ -84,7 +84,7 @@ class BidScraper:
                 self._driver.execute_script("arguments[0].click();", json_button)
         
         except Exception as error:
-            self.scrap_logger.error(f'{error}: Erro ao encontrar botão')
+            self.scrap_logger.error(f'{error}: Erro ao encontrar botão', exc_info=True)
 
     def download_file(self):
         """
@@ -108,7 +108,7 @@ class BidScraper:
 
                 time.sleep(1)
         except Exception as error:
-            self.scrap_logger.warning(f'{error}: Erro inesperado')
+            self.scrap_logger.warning(f'{error}: Erro inesperado', exc_info=True)
 
     def custom_file(self, new_name):
         """

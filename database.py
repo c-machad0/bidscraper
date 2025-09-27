@@ -11,6 +11,7 @@ import json
 import glob
 
 from config import IMPORTANT_KEYWORDS
+from logger import DataLogger
 
 class BidDatabase:
     """
@@ -28,6 +29,8 @@ class BidDatabase:
 
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         self._download_dir = os.path.join(BASE_DIR, 'downloads')
+
+        self.data_logger = DataLogger().get_logger('database')
 
     def create_table(self):
         """Cria tabela licitacoes com restrição UNIQUE para evitar duplicidade."""
@@ -58,7 +61,7 @@ class BidDatabase:
         downloaded_file = glob.glob(os.path.join(folderpath, file_type))
 
         if not downloaded_file:
-            print('Nenhum arquivo JSON encontrado')
+            self.data_logger.warning('Nenhum arquivo JSON encontrado')
             return
          
         max_file = max(downloaded_file, key=os.path.getctime)
@@ -92,8 +95,10 @@ class BidDatabase:
             
             self.connector.commit()
 
+            self.data_logger.info('Dados inseridos')
+
         except sqlite3.IntegrityError as e: # Lançamento de erro quando ocorrerem registros duplicados
-            print(f'⚠️ Registro duplicado detectado: {e}')
+            self.data_logger.warning(f'⚠️ Registro duplicado detectado: {e}')
             os.remove(max_file)
             self.connector.commit()
 
@@ -126,3 +131,4 @@ class BidDatabase:
         
         self.db_cursor.close()
         self.connector.close()
+        self.data_logger.info('Banco de dados fechado com sucesso')
