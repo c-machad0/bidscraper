@@ -21,7 +21,7 @@ from selenium.common.exceptions import ElementClickInterceptedException, Element
 from webdriver_manager.chrome import ChromeDriverManager
 
 from config import CITIES_URLS
-from logger import ScrapLogger
+from logger import Loggers
 
 class BidScraper:
     """
@@ -47,7 +47,7 @@ class BidScraper:
         self._service = ChromeService(ChromeDriverManager().install())
         self._driver = webdriver.Chrome(service=self._service, options=self.options)
 
-        self.scrap_logger = ScrapLogger().get_logger('scrapers')
+        self.scrap_logger = Loggers().get_logger('scrapers')
 
     def run_script(self):
         """

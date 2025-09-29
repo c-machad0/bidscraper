@@ -11,7 +11,7 @@ import json
 import glob
 
 from config import IMPORTANT_KEYWORDS
-from logger import DataLogger
+from logger import Loggers
 
 class BidDatabase:
     """
@@ -30,7 +30,7 @@ class BidDatabase:
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         self._download_dir = os.path.join(BASE_DIR, 'downloads')
 
-        self.data_logger = DataLogger().get_logger('database')
+        self.data_logger = Loggers().get_logger('database')
 
     def create_table(self):
         """Cria tabela licitacoes com restrição UNIQUE para evitar duplicidade."""

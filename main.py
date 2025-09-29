@@ -9,9 +9,9 @@ from database import BidDatabase
 from scrapers import (BidScraperItajuipe, BidScraperItapitanga, 
                       BidScraperAlmadina, BidScraperIbicarai, BidScraperUbaitaba, 
                       BidScraperBarroPreto)
-from logger import MainLogger
+from logger import Loggers
 
-logger_main = MainLogger().get_logger('main')
+logger_main = Loggers().get_logger('main')
 
 def run_database():
     """
