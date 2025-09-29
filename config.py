@@ -17,5 +17,6 @@ CITIES_URLS = {
     'Almadina': 'https://diario.almadina.ba.gov.br/homepage',
     'Ibicaraí': 'https://diario.ibicarai.ba.gov.br/homepage',
     'Ubaitaba': 'https://diario.ubaitaba.ba.gov.br/homepage',
-    'Barro Preto': 'https://diario.barropreto.ba.gov.br/homepage'
+    'Barro Preto': 'https://diario.barropreto.ba.gov.br/homepage',
+    'Itapé': 'https://diario.itape.ba.gov.br/homepage'
 }

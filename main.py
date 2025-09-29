@@ -8,7 +8,7 @@ Orquestra execução dos scrapers específicos por município e atualização do
 from database import BidDatabase
 from scrapers import (BidScraperItajuipe, BidScraperItapitanga, 
                       BidScraperAlmadina, BidScraperIbicarai, BidScraperUbaitaba, 
-                      BidScraperBarroPreto)
+                      BidScraperBarroPreto, BidScraperItape)
 from logger import Loggers
 
 logger_main = Loggers().get_logger('main')
@@ -36,7 +36,8 @@ if __name__ == '__main__':
             BidScraperAlmadina(),
             BidScraperIbicarai(),
             BidScraperUbaitaba(),
-            BidScraperBarroPreto()
+            BidScraperBarroPreto(),
+            BidScraperItape()
         ]
         
         for scraper in scrapers:
