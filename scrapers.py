@@ -20,7 +20,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementClickInterceptedException, ElementNotInteractableException, StaleElementReferenceException
 from webdriver_manager.chrome import ChromeDriverManager
 
-from config import CITIES_URLS
+from config import CITIES_URLS, SCRAP_ARGUMENTS
 from logger import Loggers
 
 class BidScraper:
@@ -44,6 +44,10 @@ class BidScraper:
         }
 
         self.options.add_experimental_option('prefs', prefs)
+        
+        for arg in SCRAP_ARGUMENTS: # Opções utilizadas quando o servidor estiver online
+            self.options.add_argument(SCRAP_ARGUMENTS[arg])
+
         self._service = ChromeService(ChromeDriverManager().install())
         self._driver = webdriver.Chrome(service=self._service, options=self.options)
 
@@ -103,7 +107,7 @@ class BidScraper:
                     break
                 
                 if time.time() - start_time > timeout:
-                    self.scrap_logger.warning(f'{error}: Tempo de download excedido')
+                    self.scrap_logger.warning('Tempo de download excedido')
                     break
 
                 time.sleep(1)

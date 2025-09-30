@@ -20,3 +20,10 @@ CITIES_URLS = {
     'Barro Preto': 'https://diario.barropreto.ba.gov.br/homepage',
     'Itapé': 'https://diario.itape.ba.gov.br/homepage'
 }
+
+SCRAP_ARGUMENTS = {
+    'Headless': '--headless',
+    'GPU': '--disable-gpu',
+    'Sandbox': '--no-sandbox',
+    'DevSHM': '--disable-dev-shm-usage'
+}
