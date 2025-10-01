@@ -208,7 +208,7 @@ class BidScraperBarroPreto(BidScraper):
     _scraper_name = 'Barro Preto'
 
     def access_url(self):
-        self._driver.get(CITIES_URLS['Barro Preto'])
+        self._driver.get(CITIES_URLS['Barropreto'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')

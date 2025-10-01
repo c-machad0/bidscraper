@@ -10,8 +10,10 @@ from scrapers import (BidScraperItajuipe, BidScraperItapitanga,
                       BidScraperAlmadina, BidScraperIbicarai, BidScraperUbaitaba, 
                       BidScraperBarroPreto, BidScraperItape)
 from logger import Loggers
+from messages import DailyReportSender
 
 logger_main = Loggers().get_logger('main')
+sender = DailyReportSender()
 
 def run_database():
     """
@@ -50,3 +52,4 @@ if __name__ == '__main__':
         logger_main.error(f'Erro CRÍTICO encontrado durante a execução: {error}', exc_info=True) # exc_info=True informa detalhes da exceção apresentada
     finally:
         logger_main.info('Processo principal encerrado')
+        sender.start_schedule()
