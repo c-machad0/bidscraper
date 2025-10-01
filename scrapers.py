@@ -45,8 +45,8 @@ class BidScraper:
 
         self.options.add_experimental_option('prefs', prefs)
         
-        for arg in SCRAP_ARGUMENTS: # Opções utilizadas quando o servidor estiver online
-            self.options.add_argument(SCRAP_ARGUMENTS[arg])
+        #for arg in SCRAP_ARGUMENTS: # Opções utilizadas quando o servidor estiver online
+        #    self.options.add_argument(SCRAP_ARGUMENTS[arg])
 
         self._service = ChromeService(ChromeDriverManager().install())
         self._driver = webdriver.Chrome(service=self._service, options=self.options)
@@ -146,10 +146,10 @@ class BidScraper:
         self._driver.quit()
 
 class BidScraperItajuipe(BidScraper):
-    _scraper_name = 'Itajuípe'
+    _scraper_name = 'Itajuipe'
 
     def access_url(self):
-        self._driver.get(CITIES_URLS['Itajuípe'])
+        self._driver.get(CITIES_URLS['Itajuipe'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -181,10 +181,10 @@ class BidScraperAlmadina(BidScraper):
         super().custom_file(new_name)
 
 class BidScraperIbicarai(BidScraper):
-    _scraper_name = 'Ibicaraí'
+    _scraper_name = 'Ibicarai'
 
     def access_url(self):
-        self._driver.get(CITIES_URLS['Ibicaraí'])
+        self._driver.get(CITIES_URLS['Ibicarai'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')
@@ -217,10 +217,10 @@ class BidScraperBarroPreto(BidScraper):
         super().custom_file(new_name)
 
 class BidScraperItape(BidScraper):
-    _scraper_name = 'Itapé'
+    _scraper_name = 'Itape'
 
     def access_url(self):
-        self._driver.get(CITIES_URLS['Itapé'])
+        self._driver.get(CITIES_URLS['Itape'])
 
     def custom_file(self):
         current_date = date.today().strftime('%d-%m-%Y')

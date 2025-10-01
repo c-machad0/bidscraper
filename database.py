@@ -68,7 +68,7 @@ class BidDatabase:
 
         # Extraindo nome da cidade através do arquivo JSON
         filename = os.path.basename(max_file)
-        city_name = filename.split('_')[-1].replace('.json', '') # Divide a string por '_', depois pega o ultimo elemento: 'itajuipe.json' e elimina o '.json'
+        city_name = filename.split('_')[-1].replace('.json', '').capitalize() # Divide a string por '_', depois pega o ultimo elemento: 'itajuipe.json' e elimina o '.json'
 
         with open(max_file, 'r', encoding='utf-8') as file:
             json_file = json.load(file)
@@ -109,7 +109,7 @@ class BidDatabase:
 
         self.connector.commit()
 
-    def filtered_search(self, modality):
+    def list_database(self):
         """
         Retorna lista de registros que correspondem aos filtros aplicados.
 
@@ -120,11 +120,11 @@ class BidDatabase:
             List of tuples com os registros encontrados.
         """
 
-        self.db_cursor.execute('SELECT * FROM licitacoes where modalidade LIKE ?', (f'%{modality}%', ))
+        self.db_cursor.execute('SELECT * FROM licitacoes')
         
-        filtered_info = self.db_cursor.fetchall()
+        list_data = self.db_cursor.fetchall()
 
-        return filtered_info
+        return list_data
     
     def close_database(self):
         """Fecha cursor e conexão com banco."""

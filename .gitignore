@@ -17,6 +17,9 @@ __pycache__/
 log.*
 logs/
 
+# Arquivos privados
+config_private.py
+
 # Arquivos json diversos
 ambient-fuze-461615-d0-e02e0ea39eed.json
 

@@ -12,13 +12,13 @@ IMPORTANT_KEYWORDS = {
 }
 
 CITIES_URLS = {
-    'Itajuípe': 'https://diario.itajuipe.ba.gov.br/homepage',
+    'Itajuipe': 'https://diario.itajuipe.ba.gov.br/homepage',
     'Itapitanga': 'https://diario.itapitanga.ba.gov.br/homepage',
     'Almadina': 'https://diario.almadina.ba.gov.br/homepage',
-    'Ibicaraí': 'https://diario.ibicarai.ba.gov.br/homepage',
+    'Ibicarai': 'https://diario.ibicarai.ba.gov.br/homepage',
     'Ubaitaba': 'https://diario.ubaitaba.ba.gov.br/homepage',
-    'Barro Preto': 'https://diario.barropreto.ba.gov.br/homepage',
-    'Itapé': 'https://diario.itape.ba.gov.br/homepage'
+    'Barropreto': 'https://diario.barropreto.ba.gov.br/homepage',
+    'Itape': 'https://diario.itape.ba.gov.br/homepage'
 }
 
 SCRAP_ARGUMENTS = {
