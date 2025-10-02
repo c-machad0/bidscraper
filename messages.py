@@ -46,7 +46,7 @@ class DailyReportSender:
                     f'{"Cidade:":<12} {row[1]}\n' # imprime o texto alinhado à esquerda com espaço reservado de 12 caracteres
                     f'{"Modalidade:":<12} {row[3]}\n'
                     f'{"Resumo:":<12} {row[2]}\n'
-                    f'{"Link:":<12} {CITIES_URLS[row[1]]}',
+                    f'{"Link:":<12} {CITIES_URLS[row[1]]}'
                     ),
                     parse_mode='Markdown'
                 )
