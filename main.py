@@ -8,7 +8,7 @@ Orquestra execução dos scrapers específicos por município e atualização do
 from database import BidDatabase
 from scrapers import (BidScraperItajuipe, BidScraperItapitanga, 
                       BidScraperAlmadina, BidScraperIbicarai, BidScraperUbaitaba, 
-                      BidScraperBarroPreto, BidScraperItape)
+                      BidScraperBarroPreto, BidScraperItape, BidScraperUbata)
 from logger import Loggers
 from messages import DailyReportSender
 
@@ -23,6 +23,7 @@ def run_database():
     db = BidDatabase()
     db.create_table()
     db.update_table()
+    db.list_database()
     db.clear_dispensa()
     db.close_database()
 
@@ -40,7 +41,8 @@ if __name__ == '__main__':
             BidScraperIbicarai(),
             BidScraperUbaitaba(),
             BidScraperBarroPreto(),
-            BidScraperItape()
+            BidScraperItape(),
+            BidScraperUbata()
         ]
         
         for scraper in scrapers:

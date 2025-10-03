@@ -226,3 +226,14 @@ class BidScraperItape(BidScraper):
         current_date = date.today().strftime('%d-%m-%Y')
         new_name = f'{current_date}_itape.json'
         return super().custom_file(new_name)
+
+class BidScraperUbata(BidScraper):
+    _scraper_name = 'Ubata'
+
+    def access_url(self):
+        self._driver.get(CITIES_URLS['Ubata'])
+
+    def custom_file(self):
+        current_data = date.today().strftime('%d-%m-%Y')
+        new_name = f'{current_data}_ubata.json'
+        return super().custom_file(new_name)

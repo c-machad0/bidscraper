@@ -23,7 +23,7 @@ class DailyReportSender:
         self.message_log = Loggers().get_logger('messages')
 
     def start_schedule(self):
-        schedule.every().day.at("12:57").do(self.job)
+        schedule.every().day.at("12:45").do(self.job)
 
         self.message_log.info("Agendador inciado.")
 
