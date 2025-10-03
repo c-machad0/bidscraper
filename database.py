@@ -9,6 +9,7 @@ import sqlite3
 import os
 import json
 import glob
+from datetime import date, timedelta, datetime
 
 from config import IMPORTANT_KEYWORDS
 from logger import Loggers
@@ -122,13 +123,50 @@ class BidDatabase:
 
         self.db_cursor.execute('SELECT * FROM licitacoes')
         
-        list_data = self.db_cursor.fetchall()
+        self.list_data = self.db_cursor.fetchall()
 
-        return list_data
+        return self.list_data
     
+    def clear_dispensa(self):
+        """
+        Método que exclui todos os registros de dispensas com mais de 7 dias.
+        Já que elas tem prazo de 3 dias para envio de propostas
+        """
+        current_date = date.today()
+        date_to_remove = timedelta(days=7)
+        data_removed = False # Flag para identificar se houve exclusão
+
+        try:
+            for row in self.list_data:
+                extraction_date_str = (row[4])[:10]
+                extraction_date = datetime.strptime(extraction_date_str, '%Y-%m-%d').date()
+                
+                if current_date - extraction_date >= date_to_remove:
+                    self.db_cursor.execute(
+                        '''DELETE FROM licitacoes WHERE modalidade = ? AND data_extracao LIKE ?''', 
+                        ('Dispensa', extraction_date_str + '%')
+                        )
+
+                    data_removed = True
+
+            self.connector.commit()
+
+            if not data_removed:
+                self.data_logger.info('Nenhuma dispensa encontrada para exclusão')
+            else:
+                self.data_logger.info('Dispensas excluídas com sucesso')
+
+        except Exception as e:
+            self.data_logger.error(f'Erro ao limpar a dispensa: {e}')
+
     def close_database(self):
         """Fecha cursor e conexão com banco."""
         
         self.db_cursor.close()
         self.connector.close()
         self.data_logger.info('Banco de dados fechado com sucesso')
+
+if __name__ == '__main__':
+    db = BidDatabase()
+    db.list_database()
+    db.clear_dispensa()

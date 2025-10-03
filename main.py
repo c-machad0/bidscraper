@@ -23,6 +23,7 @@ def run_database():
     db = BidDatabase()
     db.create_table()
     db.update_table()
+    db.clear_dispensa()
     db.close_database()
 
 if __name__ == '__main__':
