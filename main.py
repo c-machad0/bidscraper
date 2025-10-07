@@ -10,7 +10,7 @@ import time
 from database import BidDatabase
 from scrapers import (BidScraperItajuipe, BidScraperItapitanga, 
                       BidScraperAlmadina, BidScraperIbicarai, BidScraperUbaitaba, 
-                      BidScraperBarroPreto, BidScraperItape)
+                      BidScraperBarroPreto, BidScraperItape, BidScraperUbata)
 from logger import Loggers
 from messages import DailyReportSender
 
@@ -18,6 +18,7 @@ class Main:
     def __init__(self):
         self.logger_main = Loggers().get_logger('main')
         self.sender = DailyReportSender()
+
 
     def run_app(self):
         try:

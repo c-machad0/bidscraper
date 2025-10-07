@@ -27,7 +27,7 @@ class DailyReportSender:
                 text=text,
                 parse_mode='Markdown'
             )
-
+            
         except Exception as e:
             self.message_log.error(f'Erro ao enviar mensagem: {e}')
 

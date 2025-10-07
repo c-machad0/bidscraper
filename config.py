@@ -18,7 +18,8 @@ CITIES_URLS = {
     'Ibicarai': 'https://diario.ibicarai.ba.gov.br/homepage',
     'Ubaitaba': 'https://diario.ubaitaba.ba.gov.br/homepage',
     'Barropreto': 'https://diario.barropreto.ba.gov.br/homepage',
-    'Itape': 'https://diario.itape.ba.gov.br/homepage'
+    'Itape': 'https://diario.itape.ba.gov.br/homepage',
+    'Ubata': 'https://diario.ubata.ba.gov.br/homepage'
 }
 
 SCRAP_ARGUMENTS = {
