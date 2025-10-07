@@ -45,8 +45,8 @@ class BidScraper:
 
         self.options.add_experimental_option('prefs', prefs)
         
-        #for arg in SCRAP_ARGUMENTS: # Opções utilizadas quando o servidor estiver online
-        #    self.options.add_argument(SCRAP_ARGUMENTS[arg])
+        for arg in SCRAP_ARGUMENTS: # Opções utilizadas quando o servidor estiver online
+            self.options.add_argument(SCRAP_ARGUMENTS[arg])
 
         self._service = ChromeService(ChromeDriverManager().install())
         self._driver = webdriver.Chrome(service=self._service, options=self.options)

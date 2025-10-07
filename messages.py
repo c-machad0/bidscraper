@@ -22,7 +22,7 @@ class DailyReportSender:
 
     async def _send_message_async(self, text: str):
         try:
-            await self.bot.send_message(
+            await self.bot_message.send_message(
                 chat_id=chat_id,
                 text=text,
                 parse_mode='Markdown'

@@ -19,17 +19,16 @@ class Main:
         self.logger_main = Loggers().get_logger('main')
         self.sender = DailyReportSender()
 
-
     def run_app(self):
         try:
             scrapers = [
                 BidScraperItajuipe(),
-                #BidScraperItapitanga(),
-                #BidScraperAlmadina(),
-                #BidScraperIbicarai(),
-                #BidScraperUbaitaba(),
-                #BidScraperBarroPreto(),
-                #BidScraperItape()
+                BidScraperItapitanga(),
+                BidScraperAlmadina(),
+                BidScraperIbicarai(),
+                BidScraperUbaitaba(),
+                BidScraperBarroPreto(),
+                BidScraperItape()
             ]
             
             for scraper in scrapers:
@@ -48,7 +47,6 @@ class Main:
         finally:
             self.logger_main.info('Processo principal encerrado')
             
-
     def run_database(self):
         """
         Cria conexão com o banco, cria tabela se necessário, atualiza dados a partir de arquivos JSON
@@ -61,7 +59,7 @@ class Main:
         db.close_database()
 
     def run_schedule(self):
-        schedule.every().day.at("21:26").do(self.run_app)
+        schedule.every().day.at("13:30").do(self.run_app)
 
         self.logger_main.info('Scraper sendo iniciado')
 
