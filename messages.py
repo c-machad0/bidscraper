@@ -5,10 +5,8 @@ Arquivo responsável por faz a ligação entre as informações do banco de dado
 o telegram do cliente.
 """
 import asyncio
-import time as tm
 from datetime import date
 
-import schedule # Para agendar o envio de mensagens pelo telegram
 from telegram import Bot
 
 from database import BidDatabase
@@ -22,43 +20,47 @@ class DailyReportSender:
         self.db = BidDatabase()
         self.message_log = Loggers().get_logger('messages')
 
-    def start_schedule(self):
-        schedule.every().day.at("12:57").do(self.job)
+    async def _send_message_async(self, text: str):
+        try:
+            await self.bot.send_message(
+                chat_id=chat_id,
+                text=text,
+                parse_mode='Markdown'
+            )
 
-        self.message_log.info("Agendador inciado.")
+        except Exception as e:
+            self.message_log.error(f'Erro ao enviar mensagem: {e}')
 
-        while True:
-            schedule.run_pending()
-            tm.sleep(1)
-
-    async def send_message(self):
+    def send_daily_reports(self):
         info_database = self.db.list_database()
+        self.db.close_database()
+
         current_date = date.today().strftime('%Y-%m-%d')
         messages_sent = 0
+
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
         
         for row in info_database:
             extraction_date = (row[4])[:10] # [:10]pega somente os 10 primeiros caracteres da coluan (YYYY-MM-DD)
             if extraction_date == current_date:
-                await self.bot_message.send_message(
-                    chat_id=chat_id,
-                    text=(
+                msg = (
                     '⚠️ Nova licitação encontrada ⚠️\n'
                     f'{"Cidade:":<12} {row[1]}\n' # imprime o texto alinhado à esquerda com espaço reservado de 12 caracteres
                     f'{"Modalidade:":<12} {row[3]}\n'
                     f'{"Resumo:":<12} {row[2]}\n'
-                    f'{"Link:":<12} {CITIES_URLS[row[1]]}'
-                    ),
-                    parse_mode='Markdown'
-                )
+                    f'{"Acessar Portal:":<12} {CITIES_URLS[row[1]]}'
+                    )
+                loop.run_until_complete(self._send_message_async(msg))
                 messages_sent += 1
-                self.message_log.info('Mensagem enviada')
         
+        loop.close()
+
         if messages_sent == 0:
             self.message_log.info('Nenhuma licitação encontrada hoje')
-
-    def job(self):
-        asyncio.run(self.send_message())
+        else:
+            self.message_log.info(f'{messages_sent} mensagens enviadas no dia de hoje ({date.today().strftime('%d-%m-%Y')})')
 
 if __name__ == '__main__':
     sender = DailyReportSender()
-    sender.start_schedule()
+    sender.send_daily_reports()
