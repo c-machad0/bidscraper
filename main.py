@@ -6,6 +6,7 @@ Orquestra execução dos scrapers específicos por município e atualização do
 """
 import schedule
 import time
+import os
 
 from database import BidDatabase
 from scrapers import (BidScraperItajuipe, BidScraperItapitanga, 
@@ -60,13 +61,18 @@ class Main:
 
     def run_schedule(self):
         schedule.every().day.at("13:30").do(self.run_app)
-
-        self.logger_main.info('Scraper sendo iniciado')
+        self.logger_main.info('Agendamento iniciado - execução diária às 13:30')
 
         while True:
             schedule.run_pending()
-            time.sleep(1)
+            time.sleep(60)
 
 if __name__ == '__main__':
-    app = Main()
-    app.run_schedule()
+    # Para desenvolvimento local
+    if os.getenv('ENVIRONMENT') == 'development':
+        app = Main()
+        app.run_app()
+    else:
+    # Para produção
+        app = Main()
+        app.run_schedule()
