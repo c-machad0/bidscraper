@@ -12,7 +12,7 @@ from telegram import Bot
 from database import BidDatabase
 from logger import Loggers
 from config import CITIES_URLS
-from config_private import my_token, chat_id
+from config_private import my_token, chat_id_channel
 
 class DailyReportSender:
     def __init__(self):
@@ -23,7 +23,7 @@ class DailyReportSender:
     async def _send_message_async(self, text: str):
         try:
             await self.bot_message.send_message(
-                chat_id=chat_id,
+                chat_id=chat_id_channel,
                 text=text,
                 parse_mode='Markdown'
             )

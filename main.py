@@ -7,6 +7,7 @@ Orquestra execução dos scrapers específicos por município e atualização do
 import schedule
 import time
 import os
+import sys
 
 from database import BidDatabase
 from scrapers import (BidScraperItajuipe, BidScraperItapitanga, 
@@ -47,6 +48,7 @@ class Main:
         
         finally:
             self.logger_main.info('Processo principal encerrado')
+            sys.exit(0) # Para Railway
             
     def run_database(self):
         """
@@ -65,7 +67,7 @@ class Main:
 
         while True:
             schedule.run_pending()
-            time.sleep(60)
+            time.sleep(30)
 
 if __name__ == '__main__':
     # Para desenvolvimento local
