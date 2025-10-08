@@ -4,8 +4,6 @@ main.py
 Ponto de entrada para execução do scraping de licitações municipais.
 Orquestra execução dos scrapers específicos por município e atualização do banco de dados.
 """
-import schedule
-import time
 import os
 import sys
 
@@ -40,41 +38,23 @@ class Main:
                 self.run_database()
 
             self.logger_main.info('Finalizado o scraping para todos os municípios')
-
             self.sender.send_daily_reports()
 
         except Exception as error:
-            self.logger_main.error(f'Erro CRÍTICO encontrado durante a execução: {error}', exc_info=True) # exc_info=True informa detalhes da exceção apresentada
+            self.logger_main.error(f'Erro CRÍTICO encontrado durante a execução: {error}', exc_info=True)
         
         finally:
             self.logger_main.info('Processo principal encerrado')
-            sys.exit(0) # Para Railway
+            sys.exit(0)  # Necessário para Railway Cron Job
             
     def run_database(self):
-        """
-        Cria conexão com o banco, cria tabela se necessário, atualiza dados a partir de arquivos JSON
-        e encerra conexão.
-        """
         db = BidDatabase()
         db.create_table()
         db.update_table()
         db.clear_dispensa()
         db.close_database()
 
-    def run_schedule(self):
-        schedule.every().day.at("13:30").do(self.run_app)
-        self.logger_main.info('Agendamento iniciado - execução diária às 13:30')
-
-        while True:
-            schedule.run_pending()
-            time.sleep(30)
-
 if __name__ == '__main__':
-    # Para desenvolvimento local
-    if os.getenv('ENVIRONMENT') == 'development':
-        app = Main()
-        app.run_app()
-    else:
-    # Para produção
-        app = Main()
-        app.run_schedule()
+    # Para Railway: sempre executa o app uma vez e finaliza
+    app = Main()
+    app.run_app()

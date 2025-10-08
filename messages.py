@@ -38,29 +38,26 @@ class DailyReportSender:
         current_date = date.today().strftime('%Y-%m-%d')
         messages_sent = 0
 
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        
-        for row in info_database:
-            extraction_date = (row[4])[:10] # [:10]pega somente os 10 primeiros caracteres da coluan (YYYY-MM-DD)
-            if extraction_date == current_date:
-                msg = (
-                    '⚠️ Nova licitação encontrada ⚠️\n'
-                    f'{"Cidade:":<12} {row[1]}\n' # imprime o texto alinhado à esquerda com espaço reservado de 12 caracteres
-                    f'{"Modalidade:":<12} {row[3]}\n'
-                    f'{"Resumo:":<12} {row[2]}\n'
-                    f'{"Acessar Portal:":<12} {CITIES_URLS[row[1]]}'
-                    )
-                loop.run_until_complete(self._send_message_async(msg))
-                messages_sent += 1
-        
-        loop.close()
+        try:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            
+            for row in info_database:
+                extraction_date = (row[4])[:10] # [:10]pega somente os 10 primeiros caracteres da coluan (YYYY-MM-DD)
+                if extraction_date == current_date:
+                    msg = (
+                        '⚠️ Nova licitação encontrada ⚠️\n'
+                        f'{"Cidade:":<12} {row[1]}\n' # imprime o texto alinhado à esquerda com espaço reservado de 12 caracteres
+                        f'{"Modalidade:":<12} {row[3]}\n'
+                        f'{"Resumo:":<12} {row[2]}\n'
+                        f'{"Acessar Portal:":<12} {CITIES_URLS[row[1]]}'
+                        )
+                    loop.run_until_complete(self._send_message_async(msg))
+                    messages_sent += 1
+        finally:
+            loop.close()
 
         if messages_sent == 0:
             self.message_log.info('Nenhuma licitação encontrada hoje')
         else:
             self.message_log.info(f'{messages_sent} mensagens enviadas no dia de hoje ({date.today().strftime('%d-%m-%Y')})')
-
-if __name__ == '__main__':
-    sender = DailyReportSender()
-    sender.send_daily_reports()
