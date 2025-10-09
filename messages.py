@@ -12,7 +12,7 @@ from telegram import Bot
 from database import BidDatabase
 from logger import Loggers
 from config import CITIES_URLS
-from config_private import my_token, chat_id_channel
+from config_private_example import my_token, chat_id_channel
 
 class DailyReportSender:
     def __init__(self):
