@@ -9,6 +9,7 @@ import os
 import time
 from datetime import date
 import glob
+import sys
 
 
 from selenium import webdriver
@@ -99,15 +100,16 @@ class BidScraper:
             timeout = 30
             start_time = time.time()
             while True:
+                elapsed_time = time.time() - start_time
+                if elapsed_time > timeout:
+                    self.scrap_logger.warning('Tempo de download excedido')
+                    break
+
                 files = os.listdir(self._download_dir)
                 file_downloading = any(file.startswith('.crdownload') or file.endswith('.tmp') for file in files)
 
                 if not file_downloading:
                     self.scrap_logger.info('Download finalizado!')
-                    break
-                
-                if time.time() - start_time > timeout:
-                    self.scrap_logger.warning('Tempo de download excedido')
                     break
 
                 time.sleep(1)
@@ -135,10 +137,20 @@ class BidScraper:
         old_path = max_file
         new_path = os.path.join(self._download_dir, new_name)
 
-        if os.path.exists(new_path):
-            os.remove(new_path)
-
-        os.rename(old_path, new_path)
+        try:
+            if os.path.exists(new_path):
+                os.remove(new_path)
+                self.scrap_logger.info('Arquivo duplicado foi corrigido')
+        except Exception as e:
+            self.scrap_logger.critical(f'{e}: Erro crítico ocasionando erro', exc_info=True)
+            sys.exit(1)
+        
+        try:
+            os.rename(old_path, new_path)
+            self.scrap_logger.info('Arquivo renomeado')
+        except Exception as e:
+            self.scrap_logger.critical(f'{e}: Erro crítico ocasionando erro', exc_info=True)
+            sys.exit(1)
     
     def quit_driver(self):
         """Fecha o driver do Selenium."""
