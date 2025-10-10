@@ -4,7 +4,6 @@ main.py
 Ponto de entrada para execução do scraping de licitações municipais.
 Orquestra execução dos scrapers específicos por município e atualização do banco de dados.
 """
-import os
 import sys
 
 from database import BidDatabase
@@ -51,7 +50,6 @@ class Main:
         db = BidDatabase()
         db.create_table()
         db.update_table()
-        db.clear_dispensa()
         db.close_database()
 
 if __name__ == '__main__':
