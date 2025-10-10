@@ -1,31 +1,14 @@
-FROM python:3.12
+# Use imagem oficial do Selenium com Chrome e ChromeDriver já instalados e configurados
+FROM selenium/standalone-chrome:latest
 
-# Instale dependências do sistema para o Chrome
-RUN apt-get update && apt-get install -y \
-    wget \
-    unzip \
-    xvfb \
-    libxi6 \
-    libgconf-2-11 \
-    libayatana-appindicator3-1 \
-    libnss3 \
-    libxss1 \
-    libasound2 \
-    fonts-liberation \
-    libatk-bridge2.0-0 \
-    libgtk-3-0 \
-    xdg-utils
-
-# Baixe o Chrome
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    dpkg -i google-chrome*.deb; apt-get -fy install
-
-# Copie seu projeto
+# Diretório de trabalho dentro do container
 WORKDIR /app
+
+# Copia todo o código do seu projeto para o container
 COPY . .
 
-# Instale as dependências Python
+# Instala dependências Python necessárias do seu projeto
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Comando de inicialização (altere conforme sua aplicação)
+# Comando para rodar o seu scraper
 CMD ["python", "main.py"]
