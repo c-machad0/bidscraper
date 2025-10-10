@@ -6,8 +6,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     xvfb \
     libxi6 \
-    libgconf-2-4 \
-    libappindicator1 \
+    libgconf-2-11 \
+    libayatana-appindicator3-1 \
     libnss3 \
     libxss1 \
     libasound2 \
