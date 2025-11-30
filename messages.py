@@ -53,11 +53,11 @@ class DailyReportSender:
             asyncio.set_event_loop(loop)
             
             for col in info_database:
-                extraction_date = (col[4])[:10]  # [:10]pega somente os 10 primeiros caracteres da coluna (YYYY-MM-DD)
+                extraction_date = (col[4])[:10]
                 if extraction_date == current_date:
                     msg = (
                         '⚠️ Nova licitação encontrada ⚠️\n'
-                        f'{"Cidade:":<12} {col[1]}\n'  # imprime o texto alinhado à esquerda com espaço reservado de 12 caracteres
+                        f'{"Cidade:":<12} {col[1]}\n'
                         f'{"Modalidade:":<12} {col[3]}\n'
                         f'{"Resumo:":<12} {col[2]}\n'
                         f'{"Acessar Portal:":<12} {CITIES_URLS[col[1]]}'
@@ -71,3 +71,6 @@ class DailyReportSender:
             self.message_log.info('Nenhuma licitação encontrada hoje')
         else:
             self.message_log.info(f'{messages_sent} mensagens enviadas no dia de hoje ({date.today().strftime("%d-%m-%Y")})')
+        
+        return messages_sent  # ✨ NOVO: Retorna contagem
+
