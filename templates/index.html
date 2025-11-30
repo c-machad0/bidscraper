@@ -351,12 +351,14 @@
     <script>
         const socket = io();
         let isRunning = false;
+        let hasRunScraping = false;  // <<< Variável para controlar se rodou scraping
 
         socket.on('update', function(data) {
             addLog(data);
             updateProgress(data);
             
             if (data.type === 'complete') {
+                hasRunScraping = true;  // <<< Marca que rodou scraping
                 document.getElementById('start-btn').disabled = false;
                 document.getElementById('status-text').textContent = 'Concluído';
                 loadResults();
@@ -428,14 +430,20 @@
                 .then(data => {
                     const container = document.getElementById('results-container');
                     const totalBids = document.getElementById('total-bids');
-                    
+
                     totalBids.textContent = data.length;
                     
-                    if (data.length === 0) {
+                    if (!hasRunScraping) {
+                        container.innerHTML = '<div class="empty-state">Execute o scraping para visualizar as licitações encontradas</div>';
+                        return;
+                    }
+
+                    // Se rodou scraping mas não encontrou nenhum registro
+                    if (hasRunScraping && data.length === 0) {
                         container.innerHTML = '<div class="empty-state">Nenhuma licitação encontrada hoje</div>';
                         return;
                     }
-                    
+
                     container.innerHTML = data.map(bid => `
                         <div class="result-card">
                             <h3>${bid.cidade}</h3>
@@ -455,8 +463,9 @@
             return '';
         }
 
-        // Carregar resultados ao iniciar
+        // Carregar resultados ao iniciar (inicialmente mostra mensagem "Execute o scraping...")
         window.onload = loadResults;
     </script>
+
 </body>
 </html>
