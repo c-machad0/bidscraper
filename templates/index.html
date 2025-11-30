@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Radar Licita - Apresentação</title>
+    <title>Radar Licita</title>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <style>
         :root {
@@ -431,18 +431,22 @@
                     const container = document.getElementById('results-container');
                     const totalBids = document.getElementById('total-bids');
 
-                    totalBids.textContent = data.length;
-                    
+                    // Sempre iniciar com zero
+                    totalBids.textContent = '0';
+
                     if (!hasRunScraping) {
-                        container.innerHTML = '<div class="empty-state">Execute o scraping para visualizar as licitações encontradas</div>';
+                        container.innerHTML = '<div class="empty-state">[translate:Execute o scraping para visualizar as licitações encontradas]</div>';
                         return;
                     }
 
                     // Se rodou scraping mas não encontrou nenhum registro
                     if (hasRunScraping && data.length === 0) {
-                        container.innerHTML = '<div class="empty-state">Nenhuma licitação encontrada hoje</div>';
+                        container.innerHTML = '<div class="empty-state">[translate:Nenhuma licitação encontrada hoje]</div>';
                         return;
                     }
+
+                    // Atualiza a quantidade após o scraping
+                    totalBids.textContent = data.length;
 
                     container.innerHTML = data.map(bid => `
                         <div class="result-card">
@@ -450,7 +454,7 @@
                             <span class="badge ${getBadgeClass(bid.modalidade)}">${bid.modalidade}</span>
                             <span style="color: #6b7280; font-size: 0.9em;">${bid.data}</span>
                             <p>${bid.resumo}</p>
-                            <a href="${bid.portal}" target="_blank">🔗 Acessar Portal</a>
+                            <a href="${bid.portal}" target="_blank">🔗 [translate:Acessar Portal]</a>
                         </div>
                     `).join('');
                 });
