@@ -22,9 +22,14 @@ class Main:
     def run_app(self):
         try:
             scrapers = [
+                BidScraperItajuipe(),
                 BidScraperItapitanga(),
                 BidScraperAlmadina(),
                 BidScraperIbicarai(),
+                BidScraperUbaitaba(),
+                BidScraperBarroPreto(),
+                BidScraperItape(),
+                BidScraperUbata()
             ]
             
             total = len(scrapers)
