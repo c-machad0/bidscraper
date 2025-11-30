@@ -21,13 +21,13 @@ class Main:
     def run_app(self):
         try:
             scrapers = [
-                BidScraperItajuipe(),
+                #BidScraperItajuipe(),
                 BidScraperItapitanga(),
                 BidScraperAlmadina(),
                 BidScraperIbicarai(),
-                BidScraperUbaitaba(),
-                BidScraperBarroPreto(),
-                BidScraperItape()
+                #BidScraperUbaitaba(),
+                #BidScraperBarroPreto(),
+                #BidScraperItape()
             ]
             
             for scraper in scrapers:
@@ -49,10 +49,20 @@ class Main:
     def run_database(self):
         db = BidDatabase()
         db.create_table()
+        db.list_database()
         db.update_table()
         db.close_database()
 
+"""def run_schedule(self):
+        schedule.every().day.at("16:48").do(self.run_app)
+
+        self.logger_main.info('Scraper sendo iniciado')
+
+        while True:
+            schedule.run_pending()
+            time.sleep(1)"""
+
 if __name__ == '__main__':
-    # Para Railway: sempre executa o app uma vez e finaliza
     app = Main()
     app.run_app()
+

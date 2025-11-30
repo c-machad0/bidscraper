@@ -41,7 +41,7 @@ class BidDatabase:
                 cidade TEXT NOT NULL,
                 resumo TEXT,
                 modalidade TEXT,
-                data_extracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                data_extracao TIMESTAMP DEFAULT (DATETIME('now', 'localtime')),
                 UNIQUE(cidade, resumo, modalidade)
                 )
             ''')
